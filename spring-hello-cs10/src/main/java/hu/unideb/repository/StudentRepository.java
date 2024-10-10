@@ -9,11 +9,15 @@ import java.util.Optional;
 public interface StudentRepository {
     List<Student> findAll();
 
-    Optional<Student> findOne(@NonNull String neptun);
+    Optional<Student> findOne(
+            @NonNull String neptun);
 
-    Student createOne(@NonNull Student student);
+    Student createOne(
+            @NonNull Student student);
 
-    Student updateOne(@NonNull Student student);
+    Student updateOne(
+            @NonNull Student student);
 
-    void deleteOne(@NonNull String neptun);
+    void deleteOne(
+            @NonNull String neptun);
 }

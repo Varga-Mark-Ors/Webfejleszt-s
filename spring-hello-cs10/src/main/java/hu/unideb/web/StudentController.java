@@ -1,9 +1,14 @@
 package hu.unideb.web;
 
 import hu.unideb.model.Student;
+import org.slf4j.Logger;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+
 
 public interface StudentController {
     @GetMapping("/student")
@@ -20,4 +25,16 @@ public interface StudentController {
 
     @DeleteMapping("/student/{neptun}")
     void deleteOne(@PathVariable String neptun);
+
+    @GetMapping("/search")
+    List<Student> search(
+            @RequestParam Optional<String> neptun,
+            @RequestParam Optional<String> name,
+            @RequestParam Optional<Student.Program> program);
+
+    @GetMapping(value = "/download", produces = "text/csv")
+    ResponseEntity<String> downloadStudents();
+
+    @GetMapping("/image")
+    ResponseEntity<byte[]> getImage();
 }

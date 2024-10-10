@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
-import java.util.stream.IntStream;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -19,9 +18,6 @@ public class Student {
     Program program;
     OffsetDateTime created;
     OffsetDateTime updated;
-
-    public Student(IntStream range) {
-    }
 
     public enum Program {
         CS_BSC, CSE_BSC, BI_BSC

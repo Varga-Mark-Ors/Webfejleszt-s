@@ -19,13 +19,17 @@ import java.util.stream.IntStream;
 
 @Component
 @AllArgsConstructor
-public class InsertStudentsRunner implements CommandLineRunner {
+public class InsertStudentsRunner
+        implements CommandLineRunner {
 
-    private  static final Logger LOGGER = LoggerFactory.getLogger(InsertStudentsRunner.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+            InsertStudentsRunner.class
+    );
 
     private static final Random RANDOM = new Random();
     private static final String DIGITS = "0123456789";
-    private static final String LETTERS = "QWERTZUIOPASDFGHJKLYXCVBNM";
+    private static final String LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
 
     private final StudentRepository repository;
 
@@ -33,23 +37,29 @@ public class InsertStudentsRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         final var faker = new Faker();
 
-
         final var now = OffsetDateTime.now();
 
         for (int i = 0; i < 100; i++) {
             final var name = faker.name();
             final var student = new Student(
                     IntStream.range(0, 6)
-                                    .mapToObj(pos -> pos == 0
-                                            ? LETTERS.charAt(RANDOM.nextInt(26))
-                                            : (LETTERS + DIGITS).charAt(RANDOM.nextInt(36)))
-                                    .map(String::valueOf)
-                                    .collect(Collectors.joining()),
-                            name.firstName() + " " + name.lastName(),
-                            Student.Program.values()[RANDOM.nextInt(3)],
-                            now,
-                            now);
-            LOGGER.info("Student was created: {}", student);
+                            .mapToObj(
+                                    pos -> pos == 0
+                                    ? LETTERS.charAt(RANDOM.nextInt(26))
+                                    : (LETTERS + DIGITS).charAt(RANDOM.nextInt(36))
+                            )
+                            .map(String::valueOf)
+                            .collect(Collectors.joining()),
+
+                    name.firstName() + " " + name.lastName(),
+                    Student.Program.values()[RANDOM.nextInt(3)],
+                    now, // placeholder
+                    now // placeholder
+            );
+
+            LOGGER.info("Student was created {}", student);
+            repository.createOne(student);
+
         }
     }
 }

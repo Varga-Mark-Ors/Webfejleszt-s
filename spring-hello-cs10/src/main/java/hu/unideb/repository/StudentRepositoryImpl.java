@@ -2,13 +2,18 @@ package hu.unideb.repository;
 
 import hu.unideb.model.Student;
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
 import java.util.*;
 
 @Repository
-public class StudentRepositoryImpl  implements StudentRepository{
+public class StudentRepositoryImpl
+        implements StudentRepository {
+
+    //@Autowired
+    //private StudentRepository foo;
 
     private final Map<String, Student> students;
 
@@ -24,19 +29,23 @@ public class StudentRepositoryImpl  implements StudentRepository{
     }
 
     @Override
-    public Optional<Student> findOne(@NonNull String neptun) {
-        return Optional.ofNullable(students.get(neptun));
+    public Optional<Student> findOne(
+            @NonNull String neptun) {
+
+        return Optional.ofNullable(
+                students.get(neptun)
+        );
     }
 
     @Override
-    public Student createOne(@NonNull Student student) {
+    public Student createOne(
+            @NonNull Student student) {
 
-        if (students.containsKey(student.getNeptun())) {
-            throw new IllegalArgumentException("Neptun already exists");
+        if(students.containsKey(student.getNeptun())) {
+            throw new IllegalArgumentException("Student already exists");
         }
 
         final OffsetDateTime now = OffsetDateTime.now();
-
         student.setCreated(now);
         student.setUpdated(now);
         students.put(student.getNeptun(), student);
@@ -45,24 +54,29 @@ public class StudentRepositoryImpl  implements StudentRepository{
     }
 
     @Override
-    public Student updateOne(@NonNull Student student) {
+    public Student updateOne(
+            @NonNull Student student) {
 
-        Student original =
-                findOne(student.getNeptun()).orElseThrow(() -> new IllegalArgumentException("Neptun does not exist"));
-
+        Student original = findOne(student.getNeptun())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Student does not exist"
+                ));
         original.setName(student.getName());
         original.setProgram(student.getProgram());
-        original.setUpdated(student.getUpdated());
+        original.setUpdated(OffsetDateTime.now());
 
-        return null;
+        return original;
     }
 
     @Override
-    public void deleteOne(@NonNull String neptun) {
+    public void deleteOne(
+            @NonNull String neptun) {
 
-        findOne(neptun).orElseThrow(() -> new IllegalArgumentException("Neptun does not exist"));
+        findOne(neptun)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Student does not exist"
+                ));
 
         students.remove(neptun);
-
     }
 }
